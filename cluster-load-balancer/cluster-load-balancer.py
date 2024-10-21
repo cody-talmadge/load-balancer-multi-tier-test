@@ -48,7 +48,7 @@ def delete_stale_servers():
     stale_servers = []
     for server_ip, server_data in server_load_status.items():
         # Remove the server from the list if it hasn't been updated in the last 15 seconds
-        if server_data.last_updated + 15 < current_time:
+        if server_data['last_updated'] + 15 < current_time:
             stale_servers.append(server_ip)
     
     for server_ip in stale_servers:
