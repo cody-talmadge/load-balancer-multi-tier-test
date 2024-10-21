@@ -39,7 +39,6 @@ After=network.target
 
 [Service]
 User=root
-Group=www-data
 WorkingDirectory=/home/ec2-user/load-balancer-multi-tier-test/cluster-load-balancer
 ExecStart=/usr/local/bin/gunicorn --workers 4 --threads 10 --bind 0.0.0.0:80 cluster-load-balancer:app
 Restart=always
