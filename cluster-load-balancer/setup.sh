@@ -47,7 +47,13 @@ Restart=always
 WantedBy=multi-user.target
 EOL
 
+# Install Redis service
+sudo dnf update
+sudo dnf install redis6
+sudo systemctl enable redis
+
 # Reload systemd, enable and start load-balancer service
 sudo systemctl daemon-reload
 sudo systemctl enable load-balancer.service
 sudo systemctl start load-balancer.service
+
