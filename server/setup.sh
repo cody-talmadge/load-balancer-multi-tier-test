@@ -31,28 +31,20 @@ done
 echo "Verifying installations..."
 python3 -c "import flask, requests, gunicorn, random, time" && echo "All dependencies are successfully installed."
 
-# Create load-balancer.service for gunicorn
-cat <<EOL | sudo tee /etc/systemd/system/load-balancer.service
-[Unit]
-Description=Gunicorn instance to serve the load balancer
-After=network.target
+# Create services
+sudo cp flask-server.service /etc/systemd/system/flask-server.service
+sudo cp load-balancer-report.service /etc/systemd/system/load-balancer-report.service
 
-[Service]
-User=root
-WorkingDirectory=/home/ec2-user/load-balancer-multi-tier-test/cluster-load-balancer
-ExecStart=/usr/local/bin/gunicorn --workers 4 --threads 10 --bind 0.0.0.0:80 cluster-load-balancer:app
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-EOL
 
 # Install Redis service
 sudo dnf update
 sudo dnf install redis6
 sudo systemctl enable redis
+sudo systemctl start redis
 
 # Reload systemd, enable and start load-balancer service
 sudo systemctl daemon-reload
-sudo systemctl enable load-balancer.service
-sudo systemctl start load-balancer.service
+sudo systemctl enable flask-server.service
+sudo systemctl start flask-server.service
+sudo systemctl enable load-balancer-report.service
+sudo systemctl start load-balancer-report.service

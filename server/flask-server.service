@@ -1,0 +1,13 @@
+[Unit]
+Description=Flask Server Scripts
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/gunicorn --workers 2 --threads 10 --bind 0.0.0.0:80 server:app
+Restart=always
+User=root
+WorkingDirectory=/home/ec2-user/cluster-load-balancer/server/
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
