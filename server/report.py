@@ -50,7 +50,7 @@ def report_status():
 
         # Send the status data to the specified endpoint
         try:
-            requests.post("http://172.31.27.238/server_status", json=status_data)
+            requests.post(LOAD_BALANCER_INTERNAL_IP + "/server_status", json=status_data)
         except requests.exceptions.RequestException as e:
             print(f"Error reporting status: {e}")
 
