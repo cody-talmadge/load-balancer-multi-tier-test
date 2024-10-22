@@ -48,7 +48,7 @@ def report_all_server_status():
     for ip in server_ips:
         server_data = r.hgetall(ip)
         decoded_data = {key.decode('utf-8'): value.decode('utf-8') for key, value in server_data.items()}
-        server_info.append(decoded_data)
+        server_info.append({ip: decoded_data})
     return jsonify(server_info)
 
 if __name__ == '__main__':
