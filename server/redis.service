@@ -1,0 +1,11 @@
+[Unit]
+Description=Redis In-Memory Data Store
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/redis6-server
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

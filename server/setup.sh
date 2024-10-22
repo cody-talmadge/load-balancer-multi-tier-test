@@ -34,6 +34,7 @@ python3 -c "import flask, requests, gunicorn, random, time" && echo "All depende
 # Create services
 sudo cp flask-server.service /etc/systemd/system/flask-server.service
 sudo cp load-balancer-report.service /etc/systemd/system/load-balancer-report.service
+sudo cp load-balancer-report.service /etc/systemd/system/redis.service
 
 
 # Install Redis service
