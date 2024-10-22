@@ -39,7 +39,7 @@ sudo cp redis.service /etc/systemd/system/redis.service
 
 # Install Redis service
 sudo dnf update
-sudo dnf install redis6
+sudo dnf install --assumeyes redis6
 sudo systemctl enable redis
 sudo systemctl start redis
 
