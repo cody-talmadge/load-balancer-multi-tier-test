@@ -7,7 +7,7 @@ Requires=flask-server.service
 ExecStart=/usr/bin/python3 report.py
 Restart=always
 User=ec2-user
-WorkingDirectory=/home/ec2-user/cluster-load-balancer/server/
+WorkingDirectory=/home/ec2-user/load-balancer-multi-tier-test/server/
 Environment=PYTHONUNBUFFERED=1
 
 [Install]
