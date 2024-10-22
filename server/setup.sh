@@ -17,7 +17,7 @@ else
 fi
 
 # Install required Python dependencies if they are not already installed
-REQUIRED_MODULES=("flask" "requests" "gunicorn" "redis" "psutil")
+REQUIRED_MODULES=("flask" "requests" "gunicorn" "redis" "psutil" "flask_cors")
 for MODULE in "${REQUIRED_MODULES[@]}"; do
     if ! python3 -c "import ${MODULE}" &> /dev/null; then
         echo "${MODULE} not found. Installing ${MODULE}..."
