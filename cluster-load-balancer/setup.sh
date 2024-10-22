@@ -52,6 +52,7 @@ sudo dnf update
 sudo dnf install redis6
 sudo cp redis.service /etc/systemd/system/redis.service
 sudo systemctl enable redis
+sudo systemctl start redis
 
 # Reload systemd, enable and start load-balancer service
 sudo systemctl daemon-reload
