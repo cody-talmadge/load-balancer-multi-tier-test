@@ -13,7 +13,7 @@ r = redis.Redis(host='localhost', port=6379, db=0)
 def load_balance():
 
     # Choose the target server randomly
-    server_ips = [ip.decode('utf-8') for ip in r.keys("user:*")]
+    server_ips = [ip.decode('utf-8') for ip in r.keys("*")]
     if len(server_ips) > 0:
         target_ip = "http://" + random.choice(server_ips)
     else:
@@ -44,7 +44,7 @@ def receive_server_status():
 @app.route('/all_server_status', methods=['GET'])
 def report_all_server_status():
     server_info = []
-    server_ips = [ip.decode('utf-8') for ip in r.keys("Ass*")]
+    server_ips = [ip.decode('utf-8') for ip in r.keys("*")]
     for ip in server_ips:
         server_data = r.hgetall(ip)
         decoded_data = {key.decode('utf-8'): value.decode('utf-8') for key, value in server_data.items()}
