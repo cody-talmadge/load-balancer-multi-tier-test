@@ -13,7 +13,7 @@ CPU_USAGE_KEY = 'recent_cpu_load'
 REQUEST_DURATION_KEY = 'recent_request_durations'
 TOTAL_REQUESTS_KEY = 'total_requests'
 
-LOAD_BALANCER_INTERNAL_IP = "172.31.27.238"
+LOAD_BALANCER_INTERNAL_IP = "172.31.19.117"
 
 # Get the server's internal IP address
 def get_internal_ip():

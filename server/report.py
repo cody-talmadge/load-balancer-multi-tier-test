@@ -12,7 +12,7 @@ redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=T
 CPU_USAGE_KEY = 'recent_cpu_load'
 REQUEST_DURATION_KEY = 'recent_request_durations'
 
-LOAD_BALANCER_INTERNAL_IP = "172.31.27.238"
+LOAD_BALANCER_INTERNAL_IP = "172.31.19.117"
 
 # Get the server's internal IP address
 def get_internal_ip():
