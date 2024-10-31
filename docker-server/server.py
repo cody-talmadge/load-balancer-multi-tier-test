@@ -4,7 +4,6 @@ from flask import Flask, request
 import psutil
 import redis
 import time
-from flask_cors import CORS
 
 # Configure Redis connection
 redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
