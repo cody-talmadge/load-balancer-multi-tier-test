@@ -29,13 +29,13 @@ def load_balance():
 def receive_server_status():
     data = request.get_json()
     try:
-        server_ip = data.get('server_ip')
-        r.hset(server_ip, mapping = {
+        server_name = data.get('server_name')
+        r.hset(server_name, mapping = {
             "average_cpu_usage": data.get("average_cpu_usage"),
             "average_request_duration": data.get("average_request_duration"),
             "last_updated": time.time()
         })
-        r.expire(server_ip, 15)
+        r.expire(server_name, 15)
         return Response(status=200)
     except:
         return Response("Invalid request", status=400)
@@ -44,11 +44,11 @@ def receive_server_status():
 @app.route('/all_server_status', methods=['GET'])
 def report_all_server_status():
     server_info = []
-    server_ips = [ip.decode('utf-8') for ip in r.keys("*")]
-    for ip in server_ips:
-        server_data = r.hgetall(ip)
+    server_names = [name.decode('utf-8') for name in r.keys("*")]
+    for name in server_names:
+        server_data = r.hgetall(name)
         decoded_data = {key.decode('utf-8'): value.decode('utf-8') for key, value in server_data.items()}
-        server_info.append({ip: decoded_data})
+        server_info.append({name: decoded_data})
     return jsonify(server_info)
 
 if __name__ == '__main__':
