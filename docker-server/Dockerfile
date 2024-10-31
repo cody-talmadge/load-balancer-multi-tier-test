@@ -3,4 +3,4 @@ WORKDIR /app
 COPY . /app
 RUN pip install -r requirements.txt
 EXPOSE 80
-CMD ["gunicorn", "--workders", "2", "--threads", "10", "--bind" "0.0.0.0:80", "server:app"]
+CMD ["gunicorn", "--workers", "2", "--threads", "10", "--bind", "0.0.0.0:80", "server:app"]
