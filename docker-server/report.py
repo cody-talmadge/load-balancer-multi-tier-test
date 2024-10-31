@@ -4,6 +4,7 @@ import requests
 import time
 import json
 import socket
+import os
 
 # Configure Redis connection
 redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
@@ -13,21 +14,7 @@ CPU_USAGE_KEY = 'recent_cpu_load'
 REQUEST_DURATION_KEY = 'recent_request_durations'
 
 LOAD_BALANCER_INTERNAL_IP = "172.31.19.117"
-
-# Get the server's internal IP address
-def get_internal_ip():
-    try:
-        # Create a socket connection to a public DNS server
-        # (we're not actually sending any data, just using it to get the local IP)
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect((LOAD_BALANCER_INTERNAL_IP, 80))
-        internal_ip = s.getsockname()[0]
-        s.close()
-        return internal_ip
-    except Exception as e:
-        return f"Error: {e}"
-
-server_ip = get_internal_ip()
+server_name = os.environ["HOSTNAME"]
 
 # Function to report server status
 def report_status():
@@ -42,7 +29,7 @@ def report_status():
 
         # Prepare the status data
         status_data = {
-            "server_ip": server_ip,
+            "server_name": server_name,
             "average_cpu_usage": average_cpu_usage,
             "average_request_duration": average_request_duration,
             "current_time": time.time()
