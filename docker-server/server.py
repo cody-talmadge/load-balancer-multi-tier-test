@@ -31,7 +31,6 @@ def get_internal_ip():
 server_ip = get_internal_ip()
 
 app = Flask(__name__)
-CORS(app)
 
 @app.route('/')
 def cpu_monitor():
