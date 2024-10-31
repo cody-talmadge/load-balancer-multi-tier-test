@@ -6,4 +6,4 @@ RUN apt-get install -y redis-server supervisor
 RUN pip install -r requirements.txt
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 EXPOSE 80
-CMD ["gunicorn", "--workers", "2", "--threads", "10", "--bind", "0.0.0.0:80", "server:app"]
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
