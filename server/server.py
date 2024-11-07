@@ -58,7 +58,7 @@ def handle_request():
     redis_client.lpush(REQUEST_DURATION_KEY, request_duration)
     redis_client.ltrim(REQUEST_DURATION_KEY, 0, 49)
     
-    return (f"Server IP: {server_ip}. Total requests handled: {total_requests}. Duration: {request_duration}. Prime list: {prime_list}")
+    return (f"Server IP: {server_ip}<br>Total requests handled: {total_requests}<br>Duration: {request_duration}<br>Prime limit: {prime_limit}<br>Prime list: {prime_list}")
 
 # Used to simulate CPU load (and network load by generating data to return)
 def primes_up_to_n(n):
