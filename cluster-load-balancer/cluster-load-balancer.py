@@ -78,9 +78,13 @@ def pick_server(server_ips):
     d_choice_1_active_requests = r.hget(d_choice_1,'active_requests')
     if d_choice_1_active_requests is None:
         d_choice_1_active_requests = 0
-    d_choice_2_active_requests = r.hget(d_choice_2,'active_requests')
+    else:
+        d_choice_1_active_requests = int(d_choice_1_active_requests)
+    d_choice_2_active_requests = int(r.hget(d_choice_2,'active_requests'))
     if d_choice_2_active_requests is None:
         d_choice_2_active_requests = 0
+    else:
+        d_choice_2_active_requests = int(d_choice_2_active_requests)
     if d_choice_1_active_requests > d_choice_2_active_requests:
         return d_choice_2
     else:
