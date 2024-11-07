@@ -22,6 +22,7 @@ def get_internal_ip():
         return internal_ip
     except Exception as e:
         return f"Error: {e}"
+        exit(1)
 
 server_ip = get_internal_ip()
 
