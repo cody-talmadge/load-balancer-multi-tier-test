@@ -12,15 +12,14 @@ r = redis.Redis(host='localhost', port=6379, db=0)
 @app.route('/')
 def load_balance():
 
-    # Choose the target server randomly
+    # Choose the target server randomly - this logic will be changed to
+    # the actual load balancer log
     server_ips = [ip.decode('utf-8') for ip in r.keys("*")]
     if len(server_ips) > 0:
         target_ip = "http://" + random.choice(server_ips)
     else:
-        # If no servers are connected
         return Response("No connected servers", 503)
     
-    # Forward the request to the chosen target server
     resp = requests.get(target_ip)
     return Response(resp.content, status=resp.status_code, headers=dict(resp.headers))
 
@@ -35,10 +34,12 @@ def receive_server_status():
             "average_request_duration": data.get("average_request_duration"),
             "last_updated": time.time()
         })
+        # Expire servers after 15 seconds of not seeing them (they should report
+        # status every 5 seconds)
         r.expire(server_name, 15)
         return Response(status=200)
     except:
-        return Response("Invalid request", status=400)
+        return Response("Request error", status=400)
 
 # Endpoint for reporting server load status for all connected servers
 @app.route('/all_server_status', methods=['GET'])
