@@ -16,11 +16,14 @@ def load_balance():
     # the actual load balancer log
     server_ips = [ip.decode('utf-8') for ip in r.keys("*")]
     if len(server_ips) > 0:
-        target_ip = "http://" + random.choice(server_ips)
+        target_ip = random.choice(server_ips)
+        target_url = "http://" + target_ip
     else:
         return Response("No connected servers", 503)
     
+    r.incr(target_ip+"_active_requests")
     resp = requests.get(target_ip)
+    r.decr(target_ip+"_active_requests")
     return Response(resp.content, status=resp.status_code, headers=dict(resp.headers))
 
 # Endpoint for receiving server load status from servers
@@ -49,6 +52,8 @@ def report_all_server_status():
     for name in server_names:
         server_data = r.hgetall(name)
         decoded_data = {key.decode('utf-8'): value.decode('utf-8') for key, value in server_data.items()}
+        active_requests = r.get(name+"_active_requests")
+        decoded_data["active_requests"] = active_requests
         server_info.append({name: decoded_data})
     return jsonify(server_info)
 
