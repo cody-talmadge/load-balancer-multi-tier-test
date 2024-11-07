@@ -1,4 +1,3 @@
-# Importing necessary modules
 import socket
 from flask import Flask, request
 import psutil
@@ -6,21 +5,18 @@ import redis
 import time
 from flask_cors import CORS
 
-# Configure Redis connection
 redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
-# Define Redis keys
 CPU_USAGE_KEY = 'recent_cpu_load'
 REQUEST_DURATION_KEY = 'recent_request_durations'
 TOTAL_REQUESTS_KEY = 'total_requests'
 
 LOAD_BALANCER_INTERNAL_IP = "172.31.19.117"
 
-# Get the server's internal IP address
 def get_internal_ip():
     try:
-        # Create a socket connection to a public DNS server
-        # (we're not actually sending any data, just using it to get the local IP)
+        # Create a socket connection to the load balancer. We're not actually
+        # sending any data, just using it to get the local IP of the server
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect((LOAD_BALANCER_INTERNAL_IP, 80))
         internal_ip = s.getsockname()[0]
@@ -32,14 +28,12 @@ def get_internal_ip():
 server_ip = get_internal_ip()
 
 app = Flask(__name__)
-CORS(app)
 
 @app.route('/')
 def cpu_monitor():
-    # Track the start time of the request
     start_time = time.time()
 
-    # Simulate CPU load
+    # Simulate CPU load, will be replaced by a better function later
     for _ in range(10000000):
         pass
     
@@ -53,7 +47,6 @@ def cpu_monitor():
     redis_client.incr(TOTAL_REQUESTS_KEY)
     total_requests = int(redis_client.get(TOTAL_REQUESTS_KEY))
     
-    # Calculate the time taken for the request
     request_duration = time.time() - start_time
     
     # Store request duration in Redis (keep only the last 50 values)

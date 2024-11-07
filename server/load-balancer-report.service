@@ -4,11 +4,10 @@ After=flask-server.service
 Requires=flask-server.service
 
 [Service]
+User=root
+WorkingDirectory=/home/ec2-user/load-balancer-multi-tier-test/server/
 ExecStart=/usr/bin/python3 report.py
 Restart=always
-User=ec2-user
-WorkingDirectory=/home/ec2-user/load-balancer-multi-tier-test/server/
-Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target
