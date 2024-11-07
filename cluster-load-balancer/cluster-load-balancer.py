@@ -18,7 +18,7 @@ def load_balance():
     # the actual load balancer log
     server_ips = [ip for ip in r.keys("*")]
     if len(server_ips) > 0:
-        target_ip = random.choice(server_ips)
+        target_ip = pick_server(server_ips)
         target_url = "http://" + target_ip
     else:
         return Response("No connected servers", 503)
@@ -66,6 +66,21 @@ def report_all_server_status():
         decoded_data = {key: value for key, value in server_data.items()}
         server_info.append({name: decoded_data})
     return jsonify(server_info)
+
+def pick_server(server_ips):
+    if len(server_ips) == 1:
+        return server_ips[0]
+    d_choice_1 = random.choice(server_ips)
+    d_choice_2 = None
+    while d_choice_1 == d_choice_2 or d_choice_2 is None:
+        d_choice_2 = random.choice(server_ips)
+
+    d_choice_1_active_requests = r.hget(d_choice_1,'active_requests')
+    d_choice_2_active_requests = r.hget(d_choice_2,'active_requests')
+    if d_choice_1_active_requests > d_choice_2_active_requests:
+        return d_choice_2
+    else:
+        return d_choice_1
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, threaded=True)
