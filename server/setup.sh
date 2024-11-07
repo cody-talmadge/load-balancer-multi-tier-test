@@ -8,7 +8,7 @@ sudo python3 get-pip.py
 sudo -H pip install flask requests gunicorn redis psutil
 
 # Allow the service to update the git repo
-git config --global --add safe.directory /home/ec2-user/load-balancer-multi-tier-test
+sudo git config --global --add safe.directory /home/ec2-user/load-balancer-multi-tier-test
 
 # Install flask-server and load-balancer-report services
 sudo cp flask-server.service /etc/systemd/system/flask-server.service
