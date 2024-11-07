@@ -36,7 +36,7 @@ def handle_request():
 
     # Simulate CPU load, will be replaced by a better function later
     # Used to determine how slow the average response will be (note: not linear)
-    prime_limit_avg = 500000
+    prime_limit_avg = 50000
     # Used to set the standard deviation for response time (note: not linear)
     std_dev = 0.5
     prime_limit = int(random.gauss(prime_limit_avg, prime_limit_avg * std_dev))
