@@ -27,7 +27,6 @@ def load_balance():
 @app.route('/server_status', methods=['POST'])
 def receive_server_status():
     data = request.get_json()
-    print("Request: " + str(data))
     try:
         server_name = data.get('server_name')
         r.hset(server_name, mapping = {
