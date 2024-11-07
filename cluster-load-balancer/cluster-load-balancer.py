@@ -28,7 +28,7 @@ def load_balance():
 def receive_server_status():
     data = request.get_json()
     try:
-        server_name = data.get('server_name')
+        server_name = data.get('server_ip')
         r.hset(server_name, mapping = {
             "average_cpu_usage": data.get("average_cpu_usage"),
             "average_request_duration": data.get("average_request_duration"),
