@@ -13,7 +13,7 @@ sudo cp load-balancer-report.service /etc/systemd/system/load-balancer-report.se
 
 # Install Redis service
 sudo dnf update
-sudo dnf install redis6
+sudo dnf install -y redis6
 sudo cp redis.service /etc/systemd/system/redis.service
 
 # Start services
