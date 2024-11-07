@@ -13,7 +13,7 @@ CPU_USAGE_KEY = 'recent_cpu_load'
 REQUEST_DURATION_KEY = 'recent_request_durations'
 TOTAL_REQUESTS_KEY = 'total_requests'
 
-LOAD_BALANCER_INTERNAL_IP = "172.31.1.1"
+LOAD_BALANCER_INTERNAL_IP = os.getenv("LOAD_BALANCER_INTERNAL_IP", "172.31.1.1")
 
 def get_internal_ip():
     try:
@@ -25,8 +25,8 @@ def get_internal_ip():
         s.close()
         return internal_ip
     except Exception as e:
-        return f"Error: {e}"
         exit(1)
+        return f"Error: {e}"
 
 server_ip = get_internal_ip()
 
