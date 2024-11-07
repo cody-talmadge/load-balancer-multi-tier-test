@@ -21,14 +21,15 @@ def load_balance():
     else:
         return Response("No connected servers", 503)
     print("Target: " + target_url)
-    r.incr(target_ip+"_active_requests")
+    r.hincrby(target_ip, 'active_requests')
+    r.hincrby(target_ip, 'req_curr_5')
     try:
         print("Target: " + target_url)
         resp = requests.get(target_url)
-        r.decr(target_ip+"_active_requests")
+        r.hincrby(target_ip, 'active_requests', -1)
         return Response(resp.content, status=resp.status_code, headers=dict(resp.headers))
     except:
-        r.decr(target_ip+"_active_requests")
+        r.hincrby(target_ip, 'active_requests', -1)
         return Response("Server error", status=503)
     
 
@@ -38,11 +39,12 @@ def receive_server_status():
     data = request.get_json()
     try:
         server_name = data.get('server_ip')
-        r.hset(server_name, mapping = {
-            "average_cpu_usage": data.get("average_cpu_usage"),
-            "average_request_duration": data.get("average_request_duration"),
-            "last_updated": time.time()
-        })
+        r.hset(server_name, 'cpu_usage', data.get('average_cpu_usage'))
+        r.hset(server_name, 'last_updated', time.time())
+        req_last_5 = r.hget(server_name, 'req_curr_5')
+        r.hset(server_name, 'req_curr_5' , 0)
+        r.hset(server_name, 'req_last_5', req_last_5)
+
         # Expire servers after 15 seconds of not seeing them (they should report
         # status every 5 seconds)
         r.expire(server_name, 15)
@@ -58,8 +60,6 @@ def report_all_server_status():
     for name in server_names:
         server_data = r.hgetall(name)
         decoded_data = {key: value for key, value in server_data.items()}
-        active_requests = r.get(name+"_active_requests")
-        decoded_data["active_requests"] = active_requests
         server_info.append({name: decoded_data})
     return jsonify(server_info)
 
