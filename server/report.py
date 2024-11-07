@@ -44,6 +44,7 @@ def report_status():
 
         try:
             requests.post("http://" + LOAD_BALANCER_INTERNAL_IP + "/server_status", json=status_data)
+            print("Sent status: " + status_data)
         except requests.exceptions.RequestException as e:
             print(f"Error reporting status: {e}")
 
