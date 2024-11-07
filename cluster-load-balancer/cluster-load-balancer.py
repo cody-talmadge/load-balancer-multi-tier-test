@@ -22,9 +22,14 @@ def load_balance():
         return Response("No connected servers", 503)
     
     r.incr(target_ip+"_active_requests")
-    resp = requests.get(target_ip)
-    r.decr(target_ip+"_active_requests")
-    return Response(resp.content, status=resp.status_code, headers=dict(resp.headers))
+    try:
+        resp = requests.get(target_ip)
+        r.decr(target_ip+"_active_requests")
+        return Response(resp.content, status=resp.status_code, headers=dict(resp.headers))
+    except:
+        r.decr(target_ip+"_active_requests")
+        return Response("Server error", status=503)
+    
 
 # Endpoint for receiving server load status from servers
 @app.route('/server_status', methods=['POST'])
