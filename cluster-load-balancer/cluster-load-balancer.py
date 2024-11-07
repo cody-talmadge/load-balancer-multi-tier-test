@@ -6,7 +6,7 @@ import redis
 
 app = Flask(__name__)
 
-r = redis.Redis(host='localhost', port=6379, db=0)
+r = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
 # Endpoint for load balancing requests
 @app.route('/')
@@ -14,7 +14,7 @@ def load_balance():
 
     # Choose the target server randomly - this logic will be changed to
     # the actual load balancer log
-    server_ips = [ip.decode('utf-8') for ip in r.keys("*")]
+    server_ips = [ip for ip in r.keys("*")]
     if len(server_ips) > 0:
         target_ip = random.choice(server_ips)
         target_url = "http://" + target_ip
@@ -23,7 +23,7 @@ def load_balance():
     
     r.incr(target_ip+"_active_requests")
     try:
-        resp = requests.get(target_ip)
+        resp = requests.get(target_url)
         r.decr(target_ip+"_active_requests")
         return Response(resp.content, status=resp.status_code, headers=dict(resp.headers))
     except:
@@ -53,10 +53,10 @@ def receive_server_status():
 @app.route('/all_server_status', methods=['GET'])
 def report_all_server_status():
     server_info = []
-    server_names = [name.decode('utf-8') for name in r.keys("*")]
+    server_names = [name for name in r.keys("*")]
     for name in server_names:
         server_data = r.hgetall(name)
-        decoded_data = {key.decode('utf-8'): value.decode('utf-8') for key, value in server_data.items()}
+        decoded_data = {key: value for key, value in server_data.items()}
         active_requests = r.get(name+"_active_requests")
         decoded_data["active_requests"] = active_requests
         server_info.append({name: decoded_data})
