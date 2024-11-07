@@ -43,21 +43,11 @@ def handle_request():
     prime_limit = int(random.gauss(prime_limit_avg, prime_limit_avg * std_dev))
     prime_list = primes_up_to_n(prime_limit)
     
-    current_cpu_percent = psutil.cpu_percent()
-    
-    # Store CPU usage in Redis (keep only the last 50 values)
-    redis_client.lpush(CPU_USAGE_KEY, current_cpu_percent)
-    redis_client.ltrim(CPU_USAGE_KEY, 0, 49)
-    
     # Update total requests count in Redis
     redis_client.incr(TOTAL_REQUESTS_KEY)
     total_requests = int(redis_client.get(TOTAL_REQUESTS_KEY))
     
     request_duration = time.time() - start_time
-    
-    # Store request duration in Redis (keep only the last 50 values)
-    redis_client.lpush(REQUEST_DURATION_KEY, request_duration)
-    redis_client.ltrim(REQUEST_DURATION_KEY, 0, 49)
     
     return (f"Server IP: {server_ip}<br>Total requests handled: {total_requests}<br>Duration: {request_duration}<br>Prime limit: {prime_limit}<br>Prime list: {prime_list}")
 

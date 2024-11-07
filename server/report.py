@@ -3,6 +3,7 @@ import requests
 import time
 import json
 import socket
+import psutil
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
@@ -28,19 +29,11 @@ server_ip = get_internal_ip()
 
 def report_status():
     while True:
-        # Recent CPU values from Redis
-        recent_cpu_values = [float(value) for value in redis_client.lrange(CPU_USAGE_KEY, 0, 49)]
-        average_cpu_usage = sum(recent_cpu_values) / len(recent_cpu_values) if recent_cpu_values else 0
-
-        # Recent request durations from Redis
-        recent_request_durations = [float(value) for value in redis_client.lrange(REQUEST_DURATION_KEY, 0, 49)]
-        average_request_duration = sum(recent_request_durations) / len(recent_request_durations) if recent_request_durations else 0
+        average_cpu_usage = psutil.cpu_percent()
 
         status_data = {
             "server_ip": server_ip,
-            "average_cpu_usage": average_cpu_usage,
-            "average_request_duration": average_request_duration,
-            "current_time": time.time()
+            "average_cpu_usage": average_cpu_usage
         }
 
         try:
