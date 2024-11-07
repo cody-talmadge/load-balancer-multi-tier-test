@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd "/home/ec2-user/load-balancer-multi-tier-test/cluster-load-balancer"
+cd "/home/ec2-user/load-balancer-multi-tier-test/server"
 
 # Install required python dependencies
 curl -O https://bootstrap.pypa.io/get-pip.py
