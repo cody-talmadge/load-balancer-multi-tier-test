@@ -23,6 +23,7 @@ def load_balance():
     
     r.incr(target_ip+"_active_requests")
     try:
+        print("Target: " + target_url)
         resp = requests.get(target_url)
         r.decr(target_ip+"_active_requests")
         return Response(resp.content, status=resp.status_code, headers=dict(resp.headers))
