@@ -3,6 +3,8 @@ from flask import Flask, request
 import psutil
 import redis
 import time
+import math
+import random
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
@@ -29,12 +31,16 @@ server_ip = get_internal_ip()
 app = Flask(__name__)
 
 @app.route('/')
-def cpu_monitor():
+def handle_request():
     start_time = time.time()
 
     # Simulate CPU load, will be replaced by a better function later
-    for _ in range(10000000):
-        pass
+    # Used to determine how slow the average response will be (note: not linear)
+    prime_limit_avg = 50000
+    # Used to set the standard deviation for response time (note: not linear)
+    std_dev = 0.1
+    prime_limit = int(random.gauss(prime_limit_avg, std_dev))
+    prime_list = primes_up_to_n(prime_limit)
     
     current_cpu_percent = psutil.cpu_percent()
     
@@ -52,7 +58,20 @@ def cpu_monitor():
     redis_client.lpush(REQUEST_DURATION_KEY, request_duration)
     redis_client.ltrim(REQUEST_DURATION_KEY, 0, 49)
     
-    return (f"Server IP: {server_ip}. Total requests handled: {total_requests}")
+    return (f"Server IP: {server_ip}. Total requests handled: {total_requests}. Duration: ${request_duration}. Prime list: {prime_list}")
+
+# Used to simulate CPU load (and network load by generating data to return)
+def primes_up_to_n(n):
+    prime_list = []
+    for num in range(2, n):
+        prime = True
+        for check_num in range(2, int(math.sqrt(num)) + 1):
+            if num % check_num == 0:
+                prime = False
+                break
+        if prime:
+            prime_list.append(num)
+    return prime_list
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, threaded=True)
