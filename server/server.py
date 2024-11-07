@@ -5,6 +5,7 @@ import redis
 import time
 import math
 import random
+import os
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 

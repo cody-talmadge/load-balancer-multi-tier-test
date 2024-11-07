@@ -4,13 +4,14 @@ import time
 import json
 import socket
 import psutil
+import os
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
 CPU_USAGE_KEY = 'recent_cpu_load'
 REQUEST_DURATION_KEY = 'recent_request_durations'
 
-LOAD_BALANCER_INTERNAL_IP = "172.31.1.1"
+LOAD_BALANCER_INTERNAL_IP = os.getenv("LOAD_BALANCER_INTERNAL_IP", "172.31.1.1")
 
 def get_internal_ip():
     try:
