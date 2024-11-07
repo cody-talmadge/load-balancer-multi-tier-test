@@ -10,7 +10,7 @@ CPU_USAGE_KEY = 'recent_cpu_load'
 REQUEST_DURATION_KEY = 'recent_request_durations'
 TOTAL_REQUESTS_KEY = 'total_requests'
 
-LOAD_BALANCER_INTERNAL_IP = "172.31.19.117"
+LOAD_BALANCER_INTERNAL_IP = "172.31.1.1"
 
 def get_internal_ip():
     try:
