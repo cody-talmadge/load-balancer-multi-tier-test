@@ -36,10 +36,10 @@ def handle_request():
 
     # Simulate CPU load, will be replaced by a better function later
     # Used to determine how slow the average response will be (note: not linear)
-    prime_limit_avg = 50000
+    prime_limit_avg = 500000
     # Used to set the standard deviation for response time (note: not linear)
-    std_dev = 0.1
-    prime_limit = int(random.gauss(prime_limit_avg, std_dev))
+    std_dev = 0.5
+    prime_limit = int(random.gauss(prime_limit_avg, prime_limit_avg * std_dev))
     prime_list = primes_up_to_n(prime_limit)
     
     current_cpu_percent = psutil.cpu_percent()
@@ -58,7 +58,7 @@ def handle_request():
     redis_client.lpush(REQUEST_DURATION_KEY, request_duration)
     redis_client.ltrim(REQUEST_DURATION_KEY, 0, 49)
     
-    return (f"Server IP: {server_ip}. Total requests handled: {total_requests}. Duration: ${request_duration}. Prime list: {prime_list}")
+    return (f"Server IP: {server_ip}. Total requests handled: {total_requests}. Duration: {request_duration}. Prime list: {prime_list}")
 
 # Used to simulate CPU load (and network load by generating data to return)
 def primes_up_to_n(n):
