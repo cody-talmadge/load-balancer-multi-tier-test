@@ -20,7 +20,7 @@ def load_balance():
         target_url = "http://" + target_ip
     else:
         return Response("No connected servers", 503)
-    
+    print("Target: " + target_url)
     r.incr(target_ip+"_active_requests")
     try:
         print("Target: " + target_url)
