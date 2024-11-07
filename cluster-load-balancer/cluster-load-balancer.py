@@ -3,8 +3,10 @@ import requests
 import random
 import time
 import redis
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 r = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
