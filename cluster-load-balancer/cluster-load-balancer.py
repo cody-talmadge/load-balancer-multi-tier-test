@@ -40,15 +40,18 @@ def load_balance():
     else:
         return Response("No connected servers", 503)
     print("Target: " + target_url)
-    r.hincrby(target_ip, 'active_requests')
-    r.hincrby(target_ip, 'req_curr_5')
+    if target_ip != overload_server:
+        r.hincrby(target_ip, 'active_requests')
+        r.hincrby(target_ip, 'req_curr_5')
     try:
         print("Target: " + target_url)
         resp = requests.get(target_url)
-        r.hincrby(target_ip, 'active_requests', -1)
+        if target_ip != overload_server:
+            r.hincrby(target_ip, 'active_requests', -1)
         return Response(resp.content, status=resp.status_code, headers=dict(resp.headers))
     except:
-        r.hincrby(target_ip, 'active_requests', -1)
+        if target_ip != overload_server:
+            r.hincrby(target_ip, 'active_requests', -1)
         return Response("Server error", status=503)
     
 
