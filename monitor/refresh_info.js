@@ -1,4 +1,4 @@
-url = "http://54.149.217.83/all_server_status"
+url = "http://35.89.30.6/all_server_status"
 async function updateData() {
     response = await fetch(url);
     data = await response.json();

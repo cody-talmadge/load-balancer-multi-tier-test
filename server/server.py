@@ -13,7 +13,11 @@ CPU_USAGE_KEY = 'recent_cpu_load'
 REQUEST_DURATION_KEY = 'recent_request_durations'
 TOTAL_REQUESTS_KEY = 'total_requests'
 
-LOAD_BALANCER_INTERNAL_IP = os.getenv("LOAD_BALANCER_INTERNAL_IP", "172.31.1.1")
+try:
+    with open("/home/ec2-user/ip.info", "r") as file:
+        LOAD_BALANCER_INTERNAL_IP = file.readline().strip()
+except:
+    LOAD_BALANCER_INTERNAL_IP = "172.31.1.1"
 
 def get_internal_ip():
     try:
