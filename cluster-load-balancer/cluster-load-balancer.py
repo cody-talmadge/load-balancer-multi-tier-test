@@ -10,6 +10,23 @@ CORS(app)
 
 r = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
+def get_internal_ip():
+    try:
+        # Create a socket connection to Google's DNS server. We're not actually
+        # sending any data, just using it to get the local IP of the server
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect("8.8.8.8", 80)
+        internal_ip = s.getsockname()[0]
+        s.close()
+        return internal_ip
+    except Exception as e:
+        return f"Error: {e}"
+        exit(1)
+
+server_ip = get_internal_ip()
+
+overload_server = '172.31.1.1' if server_ip == '172.31.2.1' else '172.31.1.1'
+
 # Endpoint for load balancing requests
 @app.route('/')
 def load_balance():
@@ -70,25 +87,29 @@ def report_all_server_status():
 def pick_server(server_ips):
     if len(server_ips) == 1:
         return server_ips[0]
-    d_choice_1 = random.choice(server_ips)
-    d_choice_2 = None
-    while d_choice_1 == d_choice_2 or d_choice_2 is None:
-        d_choice_2 = random.choice(server_ips)
+    server_1 = random.choice(server_ips)
+    server_2 = None
+    while server_2 is None or server_2 == server_1:
+        server_2 = random.choice(server_ips)
 
-    d_choice_1_active_requests = r.hget(d_choice_1,'active_requests')
-    if d_choice_1_active_requests is None:
-        d_choice_1_active_requests = 0
+    active_requests_1 = get_active_requests(server_1)
+    active_requests_2 = get_active_requests(server_2)
+
+    lower_server = server_1 if active_requests_1 < active_requests_2 else server_2
+    lower_active_requests = min(active_requests_1, active_requests_2)
+    lower_server_cpu = r.hget(lower_server, 'cpu_usage')
+
+    if lower_active_requests > 5 and lower_server_cpu > 90:
+        return overload_server
     else:
-        d_choice_1_active_requests = int(d_choice_1_active_requests)
-    d_choice_2_active_requests = r.hget(d_choice_2,'active_requests')
-    if d_choice_2_active_requests is None:
-        d_choice_2_active_requests = 0
+        return lower_server
+
+def get_active_requests(server_ip):
+    active_requests = r.hget(server_ip, 'active_requests')
+    if active_requests is None:
+        return 0
     else:
-        d_choice_2_active_requests = int(d_choice_2_active_requests)
-    if d_choice_1_active_requests > d_choice_2_active_requests:
-        return d_choice_2
-    else:
-        return d_choice_1
+        return int(active_requests)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, threaded=True)
