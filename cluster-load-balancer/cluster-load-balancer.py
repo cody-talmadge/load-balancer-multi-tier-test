@@ -25,7 +25,7 @@ def get_internal_ip():
 
 server_ip = get_internal_ip()
 
-overload_server = '172.31.1.1' if server_ip == '172.31.2.1' else '172.31.1.1'
+overload_server = '172.31.1.1' if server_ip == '172.31.2.1' else '172.31.2.1'
 
 # Endpoint for load balancing requests
 @app.route('/')
