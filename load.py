@@ -17,7 +17,7 @@ def send_requests(thread_id):
             end_time = time.time()
             duration = end_time - start_time
 
-            print(f"[Thread {thread_id}] Response: {response.text}")
+            # print(f"[Thread {thread_id}] Response: {response.text}")
             print(f"[Thread {thread_id}] Request took {duration:.4f} seconds")
 
             time_to_wait = interval - duration

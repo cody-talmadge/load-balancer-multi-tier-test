@@ -97,7 +97,7 @@ def pick_server(server_ips):
 
     lower_server = server_1 if active_requests_1 < active_requests_2 else server_2
     lower_active_requests = min(active_requests_1, active_requests_2)
-    lower_server_cpu = r.hget(lower_server, 'cpu_usage')
+    lower_server_cpu = int(r.hget(lower_server, 'cpu_usage'))
 
     if lower_active_requests > 5 and lower_server_cpu > 90:
         return overload_server
