@@ -1,9 +1,9 @@
-url = "http://35.89.30.6/all_server_status"
-async function updateData() {
-    response = await fetch(url);
+url_1 = "http://35.160.246.6/all_server_status"
+async function updateData_1() {
+    response = await fetch(url_1);
     data = await response.json();
     console.log(data);
-    table = document.getElementById("info");
+    table = document.getElementById("info-1");
     table.innerHTML = "";
     headerRow = table.insertRow();
     headerRow.insertCell().innerText  = "Server Name";
@@ -24,4 +24,31 @@ async function updateData() {
         row.insertCell().innerText = serverData.req_last_5;
     }
 }
-setInterval(() => updateData(), 1000);
+url_2 = "http://34.221.6.225/all_server_status"
+async function updateData_2() {
+    response = await fetch(url_2);
+    data = await response.json();
+    console.log(data);
+    table = document.getElementById("info-2");
+    table.innerHTML = "";
+    headerRow = table.insertRow();
+    headerRow.insertCell().innerText  = "Server Name";
+    headerRow.insertCell().innerText  = "Active Requests";
+    headerRow.insertCell().innerText  = "CPU Usage";
+    headerRow.insertCell().innerText  = "Last Updated";
+    headerRow.insertCell().innerText  = "Requests in Last 5 Seconds";
+    for (server in data) {
+        row = table.insertRow();
+        serverData = data[server];
+        serverName = Object.keys(serverData)[0];
+        serverData = serverData[serverName]
+        console.log(serverData)
+        row.insertCell().innerText = serverName;
+        row.insertCell().innerText = serverData.active_requests;
+        row.insertCell().innerText = serverData.cpu_usage;
+        row.insertCell().innerText = serverData.last_updated;
+        row.insertCell().innerText = serverData.req_last_5;
+    }
+}
+setInterval(() => updateData_1(), 1000);
+setInterval(() => updateData_2(), 1000);

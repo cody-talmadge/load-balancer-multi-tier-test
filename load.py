@@ -4,7 +4,7 @@ import random
 import threading
 
 # Cluster load balancer URL
-url = 'http://54.149.217.83'
+url = 'http://AWS-Load-Balancer-1380354736.us-west-2.elb.amazonaws.com'
 
 def send_requests(thread_id):
     while True:
