@@ -6,7 +6,8 @@ After=network.target
 User=root
 WorkingDirectory=/home/ec2-user/load-balancer-multi-tier-test/cluster-load-balancer
 ExecStartPre=/bin/bash /home/ec2-user/load-balancer-multi-tier-test/cluster-load-balancer/update.sh
-ExecStart=/usr/local/bin/gunicorn --workers 4 --threads 10 --bind 0.0.0.0:80 cluster-load-balancer:appRestart=always
+ExecStart=/usr/local/bin/gunicorn --workers 4 --threads 10 --bind 0.0.0.0:80 cluster-load-balancer:app
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
