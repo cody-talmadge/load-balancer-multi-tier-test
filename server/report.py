@@ -31,7 +31,7 @@ def get_internal_ip():
             return internal_ip
         except Exception as e:
             time.sleep(10)
-            return f"Error: {e}"
+            print("IP Error")
 
 server_ip = get_internal_ip()
 
