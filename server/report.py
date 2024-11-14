@@ -27,6 +27,7 @@ def get_internal_ip():
             internal_ip = s.getsockname()[0]
             s.close()
             ip_success = True
+            print("Server IP: ", internal_ip)
             return internal_ip
         except Exception as e:
             time.sleep(10)
