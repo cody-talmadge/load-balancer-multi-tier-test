@@ -1,5 +1,5 @@
 import socket
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import psutil
 import redis
 import time
@@ -53,8 +53,15 @@ def handle_request():
     total_requests = int(redis_client.get(TOTAL_REQUESTS_KEY))
     
     request_duration = time.time() - start_time
+
+    response = {
+            "server_ip": server_ip,
+            "total_requests_handled": total_requests,
+            "request_duration": request_duration,
+            "prime_limit": prime_limit
+        }
     
-    return (f"Server IP: {server_ip}<br>Total requests handled: {total_requests}<br>Duration: {request_duration}<br>Prime limit: {prime_limit}<br>Prime list: {prime_list}")
+    return (jsonify(response), 200)
 
 # Used to simulate CPU load (and network load by generating data to return)
 def primes_up_to_n(n):
