@@ -11,24 +11,26 @@ redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=T
 CPU_USAGE_KEY = 'recent_cpu_load'
 REQUEST_DURATION_KEY = 'recent_request_durations'
 
-try:
-    with open("/home/ec2-user/ip.info", "r") as file:
-        LOAD_BALANCER_INTERNAL_IP = file.readline().strip()
-except:
-    LOAD_BALANCER_INTERNAL_IP = "172.31.1.1"
+with open("/home/ec2-user/ip.info", "r") as file:
+    LOAD_BALANCER_INTERNAL_IP = file.readline().strip()
 
 def get_internal_ip():
-    try:
-        # Create a socket connection to Google's DNS server. We're not actually
-        # sending any data, just using it to get the local IP of the server
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect("8.8.8.8")
-        internal_ip = s.getsockname()[0]
-        s.close()
-        return internal_ip
-    except Exception as e:
-        exit(1)
-        return f"Error: {e}"
+    ip_success = False
+
+    while ip_success == False:
+        # Try to get the internal IP address of the server
+        try:
+            # Create a socket connection to Google's DNS server. We're not actually
+            # sending any data, just using it to get the local IP of the server
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect("8.8.8.8")
+            internal_ip = s.getsockname()[0]
+            s.close()
+            ip_success = True
+            return internal_ip
+        except Exception as e:
+            time.sleep(10)
+            return f"Error: {e}"
 
 server_ip = get_internal_ip()
 
