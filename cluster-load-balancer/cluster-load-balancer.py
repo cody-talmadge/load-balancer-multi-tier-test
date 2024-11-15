@@ -96,6 +96,7 @@ def report_all_server_status():
 def pick_server(server_ips):
     if len(server_ips) == 1:
         return server_ips[0]
+    
     server_1 = random.choice(server_ips)
     server_2 = None
     while server_2 is None or server_2 == server_1:
@@ -106,12 +107,13 @@ def pick_server(server_ips):
 
     lower_server = server_1 if active_requests_1 < active_requests_2 else server_2
     lower_active_requests = min(active_requests_1, active_requests_2)
-    lower_server_cpu = float(r.hget(lower_server, 'cpu_usage'))
+    cpu_usage = get_cpu_usage(lower_server)
 
-    if lower_active_requests > 5 and lower_server_cpu > 90:
+    if lower_active_requests > 5 and cpu_usage > 90:
         return overload_server
     else:
         return lower_server
+
 
 def get_active_requests(server_ip):
     active_requests = r.hget(f"server_counts:{server_ip}", 'active_requests')
@@ -119,6 +121,13 @@ def get_active_requests(server_ip):
         return 0
     else:
         return int(active_requests)
+
+def get_cpu_usage(server_ip):
+    cpu_usage = r.hget(f"server_status:{server_ip}", 'cpu_usage')
+    if cpu_usage is None:
+        return 0
+    else:
+        return float(cpu_usage)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, threaded=True)
