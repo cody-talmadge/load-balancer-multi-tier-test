@@ -66,7 +66,7 @@ def receive_server_status():
         status_key = f"server_status:{server_name}"
         r.hset(status_key, 'cpu_usage', data.get('average_cpu_usage'))
         r.hset(status_key, 'last_updated', time.time())
-        req_last_5 = r.hget(server_name, 'req_curr_5')
+        req_last_5 = r.hget(f"server_counts:{server_ip}", 'req_curr_5')
         if req_last_5 is None:
             req_last_5 = 0
         r.hset(f"server_counts:{server_ip}", 'req_curr_5' , 0)
