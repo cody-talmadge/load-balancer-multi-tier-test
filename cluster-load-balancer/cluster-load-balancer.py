@@ -63,7 +63,7 @@ def receive_server_status():
     data = request.get_json()
     try:
         server_name = data.get('server_ip')
-        status_key = f"server_status:{server_ip}"
+        status_key = f"server_status:{server_name}"
         r.hset(status_key, 'cpu_usage', data.get('average_cpu_usage'))
         r.hset(status_key, 'last_updated', time.time())
         req_last_5 = r.hget(server_name, 'req_curr_5')
