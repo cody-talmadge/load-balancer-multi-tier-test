@@ -16,7 +16,7 @@ def get_internal_ip():
         # Create a socket connection to Google's DNS server We're not actually
         # sending any data, just using it to get the local IP of the server
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect("8.8.8.8")
+        s.connect(("8.8.8.8", 53))
         internal_ip = s.getsockname()[0]
         s.close()
         return internal_ip
