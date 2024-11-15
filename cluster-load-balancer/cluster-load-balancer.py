@@ -69,8 +69,8 @@ def receive_server_status():
         req_last_5 = r.hget(f"server_counts:{server_name}", 'req_curr_5')
         if req_last_5 is None:
             req_last_5 = 0
-        r.hset(f"server_counts:{server_ip}", 'req_curr_5' , 0)
-        r.hset(f"server_counts:{server_ip}", 'req_last_5', req_last_5)
+        r.hset(f"server_counts:{server_name}", 'req_curr_5' , 0)
+        r.hset(f"server_counts:{server_name}", 'req_last_5', req_last_5)
 
         # Expire servers after 15 seconds of not seeing them (they should report
         # status every 5 seconds)
