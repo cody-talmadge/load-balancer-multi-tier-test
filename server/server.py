@@ -44,7 +44,7 @@ def handle_request():
     # Used to determine how slow the average response will be (note: not linear)
     prime_limit_avg = 100000
     # Used to set the standard deviation for response time (note: not linear)
-    std_dev = 0.5
+    std_dev = 0.00
     prime_limit = int(random.gauss(prime_limit_avg, prime_limit_avg * std_dev))
     prime_list = primes_up_to_n(prime_limit)
     
