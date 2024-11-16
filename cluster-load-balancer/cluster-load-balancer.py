@@ -110,6 +110,7 @@ def pick_server(server_ips):
     cpu_usage = get_cpu_usage(lower_server)
 
     if lower_active_requests > 5 and cpu_usage > 90:
+        # return overload_server
         return overload_server
     else:
         return lower_server
