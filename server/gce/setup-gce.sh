@@ -19,8 +19,8 @@ sudo cp redis.service /etc/systemd/system/redis.service
 
 # Start services
 sudo systemctl daemon-reload
-sudo systemctl enable redis
-sudo systemctl start redis
+sudo systemctl enable redis.service
+sudo systemctl start redis.service
 sudo systemctl enable flask-server.service
 sudo systemctl start flask-server.service
 sudo systemctl enable load-balancer-report.service
