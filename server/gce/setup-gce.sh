@@ -7,7 +7,7 @@ sudo apt-get install -y pip
 sudo -H pip install flask requests gunicorn redis psutil --break-system-packages
 
 # Allow the service to update the git repo
-sudo git config --global --add safe.directory /home/cody_talmadge/load-balancer-multi-tier-test/
+sudo git config --global --add safe.directory /home/cody_talmadge/load-balancer-multi-tier-test
 
 # Install flask-server and load-balancer-report services
 sudo cp flask-server.service /etc/systemd/system/flask-server.service
