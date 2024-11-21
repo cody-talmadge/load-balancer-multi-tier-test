@@ -1,0 +1,13 @@
+[Unit]
+Description=Flask Server Scripts
+After=flask-server.service
+Requires=flask-server.service
+
+[Service]
+User=root
+WorkingDirectory=/home/cody_talmadge/load-balancer-multi-tier-test/server/gce
+ExecStart=/usr/bin/python3 report.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
