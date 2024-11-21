@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=/home/cody_talmadge/load-balancer-multi-tier-test/server/gce
-ExecStartPre=/bin/bash cd /home/cody_talmadge/load-balancer-multi-tier-test/server/gce/update.sh
+ExecStartPre=/bin/bash /home/cody_talmadge/load-balancer-multi-tier-test/server/gce/update.sh
 ExecStart=/usr/local/bin/gunicorn --workers 4 --threads 10 --bind 0.0.0.0:80 server:app
 Restart=always
 
