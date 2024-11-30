@@ -1,4 +1,4 @@
-url_1 = "http://35.160.246.6/all_server_status"
+url_1 = "http://34.213.136.51/all_server_status"
 async function updateData_1() {
     response = await fetch(url_1);
     data = await response.json();
@@ -24,7 +24,7 @@ async function updateData_1() {
         row.insertCell().innerText = serverData.req_last_5;
     }
 }
-url_2 = "http://34.221.6.225/all_server_status"
+url_2 = "http://34.82.218.52/all_server_status"
 async function updateData_2() {
     response = await fetch(url_2);
     data = await response.json();
