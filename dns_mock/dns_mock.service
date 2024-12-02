@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve the mock DNS system
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/home/ec2-user/load-balancer-multi-tier-test/dns_mock
+ExecStartPre=/bin/bash /home/ec2-user/load-balancer-multi-tier-test/dns_mock/update.sh
+ExecStart=/usr/local/bin/gunicorn --workers 4 --threads 20 --bind 0.0.0.0:80 dns_mock:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
